@@ -1,19 +1,17 @@
 
----
 ## System
-``` Systen biletowy w oparciu o Przelewy24 i AWS
+Systen biletowy w oparciu o Przelewy24 i AWS
 
 
 
 ## Installation
 
-```bash
 $ yarn install
-```
+
 
 ## Running the app
 
-```bash
+bash
 # development
 $ yarn run start
 
@@ -22,4 +20,3 @@ $ yarn run start:dev
 
 # production mode
 $ yarn run start:prod
-```
