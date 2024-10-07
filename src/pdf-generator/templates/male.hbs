@@ -1,0 +1,38 @@
+<html>
+    <div style="margin:auto; width:820; height: 270px; max-width:820px; border: 2px solid black">
+        <div style="display: flex; flex-direction:column; margin:16px;">
+            <div style="display: flex; justify-content:space-around; flex:1">
+                <img style="object-fit: contain; width:110px" src="https://www.teatr-muzyczny.lodz.pl/sites/all/themes/muzyczny/images/logo.png"/>
+                <img style="object-fit: contain; width:194px" src="https://odoriko.pl/wp-content/uploads/2019/09/cropped-odoriko-logo-1.png"/>
+                <div style="display: flex; flex-direction:column">
+                    <div style="align-self: end;">
+                        <p>TEATR MUZYCZNY w Łodzi</p>
+                        <p>ul. Północna 47/51, tel: 42 678 19 68</p>
+                    </div>
+                </div>
+                
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <span style="font-size: 36px; font-weight:800;">{{performanceName}}</span>
+                <p>{{date}}, godz. {{time}}</p>
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+                <div style="flex:1">
+                    <span>{{placment}}</span>
+                    <div style="display: flex;">
+                        <span style="margin-right:10px">Rząd</span>
+                        <span style="font-weight: bold;">{{row}}</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex:1">
+                    <span style="margin-right: 12px;">Miejsce</span>
+                    <span>{{seat}}</span>
+                </div>
+                <div style="display: flex; aligne-self:flex-end">
+                    <span>Cena: {{price}} zł</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>

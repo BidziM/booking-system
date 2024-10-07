@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+enum BookingStatus {
+  AVAILABLE
+  BOOKED
+  SOLD
+  BOOKED_BY_ADMINISTRATOR
+}
+
+enum TransactionStatus {
+  PAID
+  WATING
+}
+
+enum ComapnyName {
+  ODORIKO
+  ODORIKO_BIS
+}
+
+enum SeatJobCroneStatus {
+  WATING
+  EXECUTED
+}
+
+enum SeatJobCroneType {
+  UNLOCK_SEAT
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+
+model Performances {
+  id                      Int                       @id @default(autoincrement())
+  name                    String
+  date                    DateTime
+  description             String?
+  time                    String
+  companyName             ComapnyName
+  uniqueUrl               String                    @default(uuid())
+  imageUrl                String?
+  datePublic              DateTime
+  //Relations
+  seats                   Seats[]
+  transactions            Transactions[]
+  SeatZoneForPerformances SeatZoneForPerformances[]
+
+  @@unique([name, date, time])
+}
+
+model Transactions {
+  id             Int               @id @default(autoincrement())
+  sessionId      String            @unique
+  status         TransactionStatus @default(WATING)
+  date           DateTime          @default(now())
+  email          String
+  price          Int
+  paymentGateway String
+  verified       Boolean           @default(false)
+  emailDelivered Boolean           @default(false)
+  //Relations
+  performance    Performances      @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+  performanceId  Int
+  seats          Seats[]
+  SeatCronJob    SeatCronJob?
+}
+
+model Seats {
+  id            Int           @id @default(autoincrement())
+  row           Int
+  seat          Int
+  status        BookingStatus @default(AVAILABLE)
+  //Relations
+  performance   Performances  @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+  performanceId Int
+  zone          SeatZone      @relation(fields: [zoneId], references: [id])
+  zoneId        Int
+  transaction   Transactions? @relation(fields: [transactionId], references: [id])
+  transactionId Int?
+  placement     String
+  bookingId     Int?
+}
+
+model SeatZoneForPerformances {
+  performance   Performances @relation(fields: [performanceId], references: [id], onDelete: Cascade)
+  performanceId Int // relation scalar field (used in the `@relation` attribute above)
+  seatZone      SeatZone     @relation(fields: [seatZoneId], references: [id], onDelete: Cascade)
+  seatZoneId    Int // relation scalar field (used in the `@relation` attribute above)
+
+  @@id([performanceId, seatZoneId])
+}
+
+model SeatZone {
+  id                      Int                       @id @default(autoincrement())
+  name                    String
+  price                   Int
+  //area         SeatZoneEnum
+  //Relations
+  seat                    Seats[]
+  SeatZoneForPerformances SeatZoneForPerformances[]
+}
+
+model SeatCronJob {
+  id            Int                @id @default(autoincrement())
+  transaction   Transactions?      @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  transactionId Int?               @unique // relation scalar field (used in the `@relation` attribute above)
+  dateToExecute DateTime
+  status        SeatJobCroneStatus @default(WATING)
+  type          SeatJobCroneType
+}
